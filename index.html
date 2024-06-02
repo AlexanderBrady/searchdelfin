@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Bar Prototype</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .suggestions {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+        .suggestions li {
+            padding: 10px;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
+        }
+        .suggestions li:hover {
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+        .results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Delfin Scholar</h1>
+        <input type="text" id="search-bar" class="search-bar" placeholder="Type here...">
+        <ul id="suggestions" class="suggestions"></ul>
+        <div id="results" class="results"></div>
+    </div>
+
+    <script>
+        const searchBar = document.getElementById('search-bar');
+        const suggestions = document.getElementById('suggestions');
+        const results = document.getElementById('results');
+
+        const suggestionsData = {
+            'u': ['User Experience'],
+            'user experience': ['User Experience Research'],
+            'user experience research': ['User Experience Research E-Commerce'],
+            'm': ['Mobile App Design'],
+            'mobile app design': ['Mobile App Design Principles']
+        };
+
+        const searchResults = {
+            'User Experience': ['Article 1: Basics of User Experience', 'Article 2: Advanced UX Design'],
+            'User Experience Research': ['Article 1: Methods of UX Research', 'Article 2: Importance of UX Research'],
+            'User Experience Research E-Commerce': ['Article 1: UX Research in E-Commerce', 'Article 2: Best Practices for E-Commerce UX'],
+            'Mobile App Design': ['Article 1: Basics of Mobile App Design', 'Article 2: Advanced Mobile App Design'],
+            'Mobile App Design Principles': ['Article 1: Key Principles of Mobile App Design', 'Article 2: Best Practices in Mobile App Design']
+        };
+
+        searchBar.addEventListener('input', () => {
+            const query = searchBar.value.toLowerCase().trim();
+            let suggestionList = [];
+
+            if (query) {
+                if (suggestionsData[query]) {
+                    suggestionList = suggestionsData[query];
+                } else {
+                    suggestionList = Object.keys(suggestionsData).filter(key => key.startsWith(query));
+                }
+            }
+
+            suggestions.innerHTML = '';
+            results.innerHTML = '';
+
+            suggestionList.forEach(suggestion => {
+                const li = document.createElement('li');
+                li.textContent = suggestion;
+                li.addEventListener('click', () => {
+                    displayResults(suggestion);
+                });
+                suggestions.appendChild(li);
+            });
+        });
+
+        function displayResults(query) {
+            suggestions.innerHTML = '';
+            searchBar.value = query;
+
+            const resultList = searchResults[query] || [];
+
+            results.innerHTML = `<h2>Search Results for "${query}"</h2>`;
+            resultList.forEach(result => {
+                const p = document.createElement('p');
+                p.textContent = result;
+                results.appendChild(p);
+            });
+        }
+    </script>
+</body>
+</html>
